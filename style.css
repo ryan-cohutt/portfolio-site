@@ -149,6 +149,10 @@ body {
                     margin: 0;
                     font-size: 24px;
                     cursor: pointer;
+                    transition: all .14s ease;
+                }
+                button:hover {
+                    color: #E9EBEC;
                 }
                 .btn-active {
                     color: #E9EBEC;
@@ -219,6 +223,10 @@ body {
                         margin: 0;
                         font-size: 24px;
                         color: #E9EBEC;
+                        transition: all .14s ease;
+                    }
+                    h4:hover {
+                        color: #818992;
                     }
                 }
             }
