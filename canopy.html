@@ -1,11 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Canopy App Project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      body {
+        background-color: #101112;
+        margin: 0;
+        font-family: 'Bricolage Grotesque', sans-serif;
+      }
+      .page-container {
+        max-width: 1100px;
+        margin: 40px auto 60px auto;
+        padding: 0 30px;
+        color: #e9ebec;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .breadcrumb {
+        font-size: 16px;
+        color: #818992;
+      }
+      .breadcrumb a {
+        color: #818992;
+        text-decoration: none;
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      h1.project-title {
+        font-family: 'Fraunces', serif;
+        font-weight: 700;
+        font-style: italic;
+        font-size: 64px;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+      .project-subtitle {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        color: #818992;
+        margin-top: 4px;
+        margin-bottom: 24px;
+        max-width: 600px;
+        line-height: 1.4;
+      }
+
+      .main-image {
+        width: 100%;
+        border-radius: 15px;
+        object-fit: cover;
+        box-shadow: 0 4px 15px rgba(233, 235, 236, 0.1);
+      }
+
+      .description-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+      }
+
+      .description-text {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        color: #e9ebec;
+        line-height: 1.6;
+      }
+
+      .project-details {
+        background-color: #1f2123;
+        border-radius: 15px;
+        padding: 24px 32px;
+        color: #818992;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .project-details h3 {
+        font-weight: 600;
+        color: #e9ebec;
+        margin: 0 0 8px 0;
+        font-size: 22px;
+      }
+
+      .project-details p {
+        margin: 0;
+      }
+
+      .tags {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background-color: #101112;
+        color: #e9ebec;
+        padding: 6px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        text-transform: capitalize;
+      }
+
+      .back-link {
+        margin-top: 40px;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+      }
+      .back-link a {
+        color: #818992;
+        text-decoration: none;
+      }
+      .back-link a:hover {
+        color: #e9ebec;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 900px) {
+        .description-section {
+          grid-template-columns: 1fr;
+        }
+        .project-title {
+          font-size: 44px;
+        }
+        .project-subtitle, .description-text, .project-details {
+          font-size: 16px;
+        }
+      }
+    </style>
 </head>
 <body>
-    
+
+  <div class="page-container">
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a> &rsaquo; Canopy App
+    </nav>
+
+    <h1 class="project-title">Canopy App</h1>
+    <p class="project-subtitle">
+      Complete brand identity design including logo, color palette, and typography for a tech startup.
+    </p>
+
+    <img
+      src="images/canopy-thumb.png"
+      alt="Canopy App Project Main Visual"
+      class="main-image"
+    />
+
+    <div class="description-section">
+      <div class="description-text">
+        <p>
+          I have always loved nature, but I often found myself overwhelmed by the details of plant care. Each species seems to come with its own rules; how often to water, how much sunlight is enough, when to re-fertilize, and how to recognize when something is wrong. All of these factors deterred me from getting some I would just eventually kill, despite my desire to grow plants myself. This personal struggle led me to create Canopy. As a plant lover and designer, I wanted to create something that would make caring for plants feel less intimidating and more inviting. Canopy is an app designed to help people bring more nature into their daily lives by simplifying the process of plant care. With Canopy, users can take a picture of any plant and receive instant identification along with tailored care instructions. Beyond just information, the app encourages an ongoing relationship between the user and their plants: plants can be saved to a personal collection, their growth tracked over time, and their health checked if something seems off. Users can also add notes, set reminders for watering or fertilizing, and build a personalized record of their plants. 
+        </p>
+        <p>
+          I wanted to design a tool that transforms plant care from something stressful into something approachable, rewarding, and even joyful. By lowering the barrier to entry, Canopy not only supports those who already enjoy plants but also invites new people to experience the benefits of caring for living things in their own spaces. My hope is that Canopy encourages users to see plants not just as decorations, but as living companions that enrich our environments, connect us to nature, and remind us to slow down and nurture growth in small, meaningful ways. 
+        </p>
+      </div>
+      <aside class="project-details">
+        <h3>Project Details</h3>
+        <!-- <p><strong>Client:</strong> Canopy Technologies</p> -->
+        <p><strong>Date:</strong> May 2024 - March 2025</p>
+        <!-- <p><strong>Role:</strong> Lead Designer</p> -->
+        <p><strong>Tools Used:</strong> Adobe Illustrator, Figma, HTML, CSS, JavaScript</p>
+
+        <h3>Categories</h3>
+        <div class="tags">
+          <div class="tag">Branding</div>
+          <div class="tag">UI/UX</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="back-link">
+      &larr; <a href="index.html">Back to Portfolio</a>
+    </div>
+  </div>
+
 </body>
 </html>
