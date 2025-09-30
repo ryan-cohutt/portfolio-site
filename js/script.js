@@ -2,10 +2,11 @@ const dot = document.querySelector(".active-dot")
 const buttons = document.querySelectorAll(".page-links button")
 const container = document.querySelector(".cont")
 const tagButtons = document.querySelectorAll(".tags button")
-const workItems = document.querySelectorAll(".work-thumb img")
-const workPopup = document.getElementById("workPopup")
-const popupClose = document.getElementById("popupClose")
-const popupOverlay = document.querySelector(".popup-overlay")
+const workPopup = document.getElementById("workPopup");
+const popupClose = document.getElementById("popupClose");
+const popupOverlay = workPopup.querySelector(".popup-overlay");
+const popupProjectsContainer = workPopup.querySelector(".popup-projects-container");
+const workItems = document.querySelectorAll(".work-thumb img");
 const popupImage = document.getElementById("popupImage")
 const popupTitle = document.getElementById("popupTitle")
 const popupDescription = document.getElementById("popupDescription")
@@ -21,6 +22,7 @@ const companyName = document.getElementById("companyName")
 const companyPosition = document.getElementById("companyPosition")
 const companyDuration = document.getElementById("companyDuration")
 const companyDesc = document.getElementById("companyDesc")
+
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -173,10 +175,84 @@ companyBlocks.forEach((block) => {
   })
 })
 
-function closePopup() {
-  workPopup.classList.remove("active")
-  document.body.style.overflow = "auto"
+// Hide all projects initially inside the popup
+function hideAllProjects() {
+  const projects = popupProjectsContainer.querySelectorAll(".popup-project");
+  projects.forEach((proj) => {
+    proj.style.display = "none";
+  });
 }
+
+// Show specific project by id inside the popup
+function showProject(projectId) {
+  hideAllProjects();
+  const project = document.getElementById(projectId);
+  if (project) {
+    project.style.display = "grid"; // use flex to show content with flex layout
+  }
+}
+
+// Update URL hash without scrolling
+function updateURLHash(projectId) {
+  if (history.pushState) {
+    // Use pushState to avoid scrolling to element with that ID
+    history.pushState(null, null, `#${projectId}`);
+  } else {
+    // Fallback for older browsers
+    location.hash = `#${projectId}`;
+  }
+}
+
+// Clear URL hash when popup closes
+function clearURLHash() {
+  if (history.pushState) {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+  } else {
+    location.hash = "";
+  }
+}
+
+// Open popup with specific project content
+function openPopup(projectId) {
+  showProject(projectId);
+  workPopup.classList.add("active");
+  document.body.style.overflow = "hidden";
+  updateURLHash(projectId);
+}
+
+// Close popup and reset states
+function closePopup() {
+  workPopup.classList.remove("active");
+  document.body.style.overflow = "auto";
+  hideAllProjects();
+  clearURLHash();
+}
+
+// Attach click event on each work item (thumbnail)
+workItems.forEach((item, index) => {
+  // Assuming each work item has a data attribute with project id to match popup project div id
+  // e.g. data-project-id="project-1"
+  item.addEventListener("click", () => {
+    const projectId = item.getAttribute("data-project-id");
+    if (projectId) {
+      openPopup(projectId);
+    }
+  });
+});
+
+// Close popup on clicking close button or overlay
+popupClose.addEventListener("click", closePopup);
+popupOverlay.addEventListener("click", closePopup);
+
+// Close popup on Escape key press
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && workPopup.classList.contains("active")) {
+    closePopup();
+  }
+});
+
+// Initially hide all projects inside popup so nothing shows before open
+hideAllProjects();
 
 function closeContactPopup() {
   contactPopup.classList.remove("active")
@@ -217,3 +293,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const offsetTop = active.offsetTop + active.offsetHeight / 2 - 4
   dot.style.top = `${offsetTop}px`
 })
+
+window.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash.substring(1); // Remove the #
+  if (hash) {
+    const project = document.getElementById(hash);
+    if (project) {
+      openPopup(hash);
+    }
+  }
+});
