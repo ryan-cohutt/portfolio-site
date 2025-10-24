@@ -23,11 +23,14 @@ const companyPosition = document.getElementById("companyPosition")
 const companyDuration = document.getElementById("companyDuration")
 const companyDesc = document.getElementById("companyDesc")
 
-
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    // Get the top position of the clicked button relative to its container
-    const offsetTop = button.offsetTop + button.offsetHeight / 2 - 4 // center dot vertically (4 = dot radius)
+    // Position the dot relative to the page-links container
+    const pageLinks = button.closest(".page-links")
+    const pageLinksRect = pageLinks.getBoundingClientRect()
+    const btnRect = button.getBoundingClientRect()
+    // compute top position of dot relative to pageLinks (center of button)
+    const offsetTop = (btnRect.top - pageLinksRect.top) + (btnRect.height / 2) - 4 // 4 = dot radius
 
     dot.style.top = `${offsetTop}px`
 
@@ -35,22 +38,32 @@ buttons.forEach((button) => {
     buttons.forEach((btn) => btn.classList.remove("btn-active"))
     button.classList.add("btn-active")
 
-    const buttonClass = button.className
-
-    // Remove all view classes first for smooth transitions
+    // Clear both view classes then set the desired one
     container.classList.remove("work-view", "about-view")
 
-    // Add appropriate view class based on clicked button
-    if (buttonClass.includes("work-link")) {
+    if (button.classList.contains("work-link")) {
       container.classList.add("work-view")
-    } else if (buttonClass.includes("about-link")) {
+    } else if (button.classList.contains("about-link")) {
       container.classList.add("about-view")
-    } else if (buttonClass.includes("contact-link")) {
+    } else if (button.classList.contains("contact-link")) {
+      // open contact popup (preserve your existing contact popup logic)
       contactPopup.classList.add("active")
       document.body.style.overflow = "hidden"
     }
-    // Home button removes all view classes, returning to default split view
+    // Home button just leaves container with no view classes (50/50)
   })
+})
+
+// position dot when page loads (robust)
+window.addEventListener("DOMContentLoaded", () => {
+  const active = document.querySelector(".btn-active")
+  if (active) {
+    const pageLinks = active.closest(".page-links")
+    const pageLinksRect = pageLinks.getBoundingClientRect()
+    const btnRect = active.getBoundingClientRect()
+    const offsetTop = (btnRect.top - pageLinksRect.top) + (btnRect.height / 2) - 4
+    dot.style.top = `${offsetTop}px`
+  }
 })
 
 const activeTags = new Set(["all"])
@@ -114,16 +127,16 @@ tagButtons.forEach((button) => {
     // Reappend in new order
     allButtons.forEach((btn) => tagsContainer.appendChild(btn))
 
-    // Filter work items
+    // Filter work items: add .inactive to items that don't match, remove it for matches
     workItems.forEach((item) => {
-      const categories = item.getAttribute("data-category").split(" ")
+      const categories = item.getAttribute("data-category").split(" ");
 
       if (activeTags.has("all") || categories.some((cat) => activeTags.has(cat))) {
-        item.classList.remove("hidden")
+        item.classList.remove("inactive");
       } else {
-        item.classList.add("hidden")
+        item.classList.add("inactive");
       }
-    })
+    });
   })
 })
 
