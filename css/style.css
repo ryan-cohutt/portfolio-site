@@ -255,7 +255,7 @@ body {
   grid-row: 1;
   display: grid;
   grid-template-columns: 1fr 0.4fr;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content 1fr min-content;
   column-gap: 35px;
   row-gap: 20px;
   width: 100%;
@@ -268,7 +268,7 @@ body {
     color: #e9ebec;
     margin: 0;
   }
-  p {
+  #intro-blurb {
     grid-row: 2;
     grid-column: 1;
     font-size: 36px;
@@ -341,6 +341,18 @@ body {
           text-wrap: nowrap;
         }
       }
+    }
+  }
+  #about-blurb {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    font-size: 36px;
+    color: #818992;
+    margin: 0;
+    line-height: 1.4em;
+    p {
+      margin: 0px;
+      margin-bottom: 30px;
     }
   }
 }
