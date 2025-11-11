@@ -23,118 +23,104 @@ const companyPosition = document.getElementById("companyPosition")
 const companyDuration = document.getElementById("companyDuration")
 const companyDesc = document.getElementById("companyDesc")
 
-let isDragging = false
-let startY = 0
-let startPosition = "home" // Can be 'home', 'work', or 'about'
+const isDragging = false
+const startY = 0
+const startPosition = "home" // Can be 'home', 'work', or 'about'
 let currentState = "home" // Track current state for snapping
 
 const sectHr = document.querySelector(".sect-hr")
 
-sectHr.addEventListener("mousedown", startDrag)
-sectHr.addEventListener("touchstart", startDrag, { passive: false })
+/* Removed drag event listeners for mobile tabs */
+// sectHr.addEventListener("mousedown", startDrag)
+// sectHr.addEventListener("touchstart", startDrag, { passive: false })
 
-function startDrag(e) {
-  if (window.innerWidth > 800) return
+// document.addEventListener("mousemove", dragDivider)
+// document.addEventListener("touchmove", dragDivider, { passive: false })
 
-  if (e.type.includes("touch")) {
-    e.preventDefault()
-  }
+// function dragDivider(e) {
+//   if (!isDragging) return
 
-  isDragging = true
-  startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
-  startPosition = currentState
+//   if (e.type.includes("touch")) {
+//     e.preventDefault()
+//   }
 
-  sectHr.style.cursor = "grabbing"
-  document.body.style.userSelect = "none"
-}
+//   const currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
+//   const deltaY = currentY - startY
 
-document.addEventListener("mousemove", dragDivider)
-document.addEventListener("touchmove", dragDivider, { passive: false })
+//   // Calculate new position (0 = top/work, middle = 50/50, bottom = about)
+//   const container = document.querySelector(".cont")
+//   const containerRect = container.getBoundingClientRect()
+//   const dividerY = sectHr.getBoundingClientRect().top - containerRect.top
 
-function dragDivider(e) {
-  if (!isDragging) return
+//   // Just update visual feedback during drag (optional)
+//   sectHr.style.opacity = "0.7"
+// }
 
-  if (e.type.includes("touch")) {
-    e.preventDefault()
-  }
+// document.addEventListener("mouseup", endDrag)
+// document.addEventListener("touchend", endDrag, { passive: false })
 
-  const currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
-  const deltaY = currentY - startY
+// function endDrag(e) {
+//   if (!isDragging) return
+//   isDragging = false
 
-  // Calculate new position (0 = top/work, middle = 50/50, bottom = about)
-  const container = document.querySelector(".cont")
-  const containerRect = container.getBoundingClientRect()
-  const dividerY = sectHr.getBoundingClientRect().top - containerRect.top
+//   const endY = e.type.includes("touch") ? e.changedTouches[0].clientY : e.clientY
+//   const deltaY = endY - startY
 
-  // Just update visual feedback during drag (optional)
-  sectHr.style.opacity = "0.7"
-}
+//   const viewportHeight = window.innerHeight
+//   const thresholdPercent = 0.15 // reduced from 0.3 (30%) to 0.15 (15%) for more responsive dragging
 
-document.addEventListener("mouseup", endDrag)
-document.addEventListener("touchend", endDrag, { passive: false })
+//   // Determine snap target based on drag distance and direction
+//   let snapTarget = startPosition
+//   const dragThreshold = viewportHeight * thresholdPercent
 
-function endDrag(e) {
-  if (!isDragging) return
-  isDragging = false
+//   if (startPosition === "home") {
+//     // From home, dragging up goes to work, down goes to about
+//     if (deltaY < -dragThreshold) {
+//       snapTarget = "work"
+//     } else if (deltaY > dragThreshold) {
+//       snapTarget = "about"
+//     }
+//   } else if (startPosition === "work") {
+//     // From work, dragging down returns to home
+//     if (deltaY > dragThreshold) {
+//       snapTarget = "home"
+//     }
+//   } else if (startPosition === "about") {
+//     // From about, dragging up returns to home
+//     if (deltaY < -dragThreshold) {
+//       snapTarget = "home"
+//     }
+//   }
 
-  const endY = e.type.includes("touch") ? e.changedTouches[0].clientY : e.clientY
-  const deltaY = endY - startY
+//   // Apply the snap state
+//   container.classList.remove("work-view", "about-view")
 
-  const viewportHeight = window.innerHeight
-  const thresholdPercent = 0.15 // reduced from 0.3 (30%) to 0.15 (15%) for more responsive dragging
+//   if (snapTarget === "work") {
+//     container.classList.add("work-view")
+//     currentState = "work"
+//   } else if (snapTarget === "about") {
+//     container.classList.add("about-view")
+//     currentState = "about"
+//   } else {
+//     currentState = "home"
+//   }
 
-  // Determine snap target based on drag distance and direction
-  let snapTarget = startPosition
-  const dragThreshold = viewportHeight * thresholdPercent
+//   // Update nav button active state
+//   const buttons = document.querySelectorAll(".page-links button")
+//   buttons.forEach((btn) => btn.classList.remove("btn-active"))
 
-  if (startPosition === "home") {
-    // From home, dragging up goes to work, down goes to about
-    if (deltaY < -dragThreshold) {
-      snapTarget = "work"
-    } else if (deltaY > dragThreshold) {
-      snapTarget = "about"
-    }
-  } else if (startPosition === "work") {
-    // From work, dragging down returns to home
-    if (deltaY > dragThreshold) {
-      snapTarget = "home"
-    }
-  } else if (startPosition === "about") {
-    // From about, dragging up returns to home
-    if (deltaY < -dragThreshold) {
-      snapTarget = "home"
-    }
-  }
+//   if (snapTarget === "work") {
+//     document.querySelector(".work-link").classList.add("btn-active")
+//   } else if (snapTarget === "about") {
+//     document.querySelector(".about-link").classList.add("btn-active")
+//   } else {
+//     document.querySelector(".home-link").classList.add("btn-active")
+//   }
 
-  // Apply the snap state
-  container.classList.remove("work-view", "about-view")
-
-  if (snapTarget === "work") {
-    container.classList.add("work-view")
-    currentState = "work"
-  } else if (snapTarget === "about") {
-    container.classList.add("about-view")
-    currentState = "about"
-  } else {
-    currentState = "home"
-  }
-
-  // Update nav button active state
-  const buttons = document.querySelectorAll(".page-links button")
-  buttons.forEach((btn) => btn.classList.remove("btn-active"))
-
-  if (snapTarget === "work") {
-    document.querySelector(".work-link").classList.add("btn-active")
-  } else if (snapTarget === "about") {
-    document.querySelector(".about-link").classList.add("btn-active")
-  } else {
-    document.querySelector(".home-link").classList.add("btn-active")
-  }
-
-  sectHr.style.opacity = "1"
-  sectHr.style.cursor = "grab"
-  document.body.style.userSelect = "auto"
-}
+//   sectHr.style.opacity = "1"
+//   sectHr.style.cursor = "grab"
+//   document.body.style.userSelect = "auto"
+// }
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -428,5 +414,49 @@ window.addEventListener("DOMContentLoaded", () => {
     if (project) {
       openPopup(hash)
     }
+  }
+})
+
+/* Added mobile tab navigation listeners */
+const mobileTabButtons = document.querySelectorAll(".mobile-tab-btn")
+
+mobileTabButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const viewType = button.getAttribute("data-view")
+
+    // Update active button state
+    mobileTabButtons.forEach((btn) => btn.classList.remove("active"))
+    button.classList.add("active")
+
+    // Update container view
+    container.classList.remove("work-view", "about-view")
+
+    if (viewType === "work") {
+      container.classList.add("work-view")
+      currentState = "work"
+    } else if (viewType === "about") {
+      container.classList.add("about-view")
+      currentState = "about"
+    } else {
+      currentState = "home"
+    }
+
+    // Update desktop navigation if visible
+    buttons.forEach((btn) => btn.classList.remove("btn-active"))
+    if (viewType === "work") {
+      document.querySelector(".work-link").classList.add("btn-active")
+    } else if (viewType === "about") {
+      document.querySelector(".about-link").classList.add("btn-active")
+    } else {
+      document.querySelector(".home-link").classList.add("btn-active")
+    }
+  })
+})
+
+/* Initialize mobile tabs on load */
+window.addEventListener("DOMContentLoaded", () => {
+  const homeTabBtn = document.querySelector('[data-view="home"]')
+  if (homeTabBtn) {
+    homeTabBtn.classList.add("active")
   }
 })
