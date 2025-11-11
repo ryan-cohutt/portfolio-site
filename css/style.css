@@ -955,7 +955,7 @@ body {
     --row3: 1fr;
     grid-template-columns: 1fr;
     column-gap: 0;
-    row-gap: 0px;
+    row-gap: 4px;
     /* padding-bottom: 20px; */
   }
   .about {
