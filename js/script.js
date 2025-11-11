@@ -31,11 +31,14 @@ let currentState = "home" // Track current state for snapping
 const sectHr = document.querySelector(".sect-hr")
 
 sectHr.addEventListener("mousedown", startDrag)
-sectHr.addEventListener("touchstart", startDrag)
+sectHr.addEventListener("touchstart", startDrag, { passive: false })
 
 function startDrag(e) {
-  // Only activate on mobile
-  if (window.innerWidth > 500) return
+  if (window.innerWidth > 800) return
+
+  if (e.type.includes("touch")) {
+    e.preventDefault()
+  }
 
   isDragging = true
   startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
@@ -46,10 +49,14 @@ function startDrag(e) {
 }
 
 document.addEventListener("mousemove", dragDivider)
-document.addEventListener("touchmove", dragDivider)
+document.addEventListener("touchmove", dragDivider, { passive: false })
 
 function dragDivider(e) {
   if (!isDragging) return
+
+  if (e.type.includes("touch")) {
+    e.preventDefault()
+  }
 
   const currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
   const deltaY = currentY - startY
@@ -64,7 +71,7 @@ function dragDivider(e) {
 }
 
 document.addEventListener("mouseup", endDrag)
-document.addEventListener("touchend", endDrag)
+document.addEventListener("touchend", endDrag, { passive: false })
 
 function endDrag(e) {
   if (!isDragging) return
@@ -74,7 +81,7 @@ function endDrag(e) {
   const deltaY = endY - startY
 
   const viewportHeight = window.innerHeight
-  const thresholdPercent = 0.1 // 10% threshold for snapping
+  const thresholdPercent = 0.15 // reduced from 0.3 (30%) to 0.15 (15%) for more responsive dragging
 
   // Determine snap target based on drag distance and direction
   let snapTarget = startPosition
