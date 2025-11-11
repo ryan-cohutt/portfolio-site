@@ -279,6 +279,9 @@ body {
   .intro-highlight {
     color: #e9ebec;
   }
+  #mobile-links {
+    display: none;
+  }
   .experience {
     grid-row: 1 / -1;
     grid-column: 2;
@@ -383,6 +386,8 @@ body {
     padding-bottom: 30px;
     display: flex;
     gap: 20px;
+    white-space: nowrap;
+    overflow-x: scroll;
     .tag-unchecked {
       background-color: transparent;
       border: 2px solid #e9ebec;
@@ -395,6 +400,7 @@ body {
       color: #e9ebec;
       transition: all .15s ease;
       cursor: pointer;
+      white-space: nowrap;
     }
     .tag-unchecked:hover {
       background-color: #e9ebec;
@@ -411,6 +417,7 @@ body {
       font-size: 23px;
       color: #e9ebec;
       cursor: pointer;
+      white-space: nowrap;
     }
   }
   .work-thumb {
@@ -876,5 +883,92 @@ body {
 
   .contact-content h2 {
     font-size: 36px;
+  }
+}
+
+@media (max-width: 500px) {
+  body {
+    padding-top: 50px;
+  }
+  .sidebar {
+    display: none;
+  }
+  .cont {
+    padding: 0;
+    display: grid;
+    --row1: 1fr;
+    --row2: 5px;
+    --row3: 1.3fr;
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 10px;
+    row-gap: 15px;
+  }
+  .about {
+    grid-template-columns: 1fr min-content;
+    column-gap: 20px;
+    h1 {
+      font-size: 74px;
+      line-height: 70px;
+      grid-column: 1;
+      margin-left: 25px;
+    }
+    #intro-blurb {
+      font-size: 16px;
+      grid-column: 1 / -1;
+      margin: 0 25px;
+    }
+    #mobile-links {
+      margin-right: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 100px;
+      height: min-content;
+      padding: 10px 10px;
+      gap: 16px;
+      justify-content: space-evenly;
+      background-color: #1f2123;
+      grid-column: 2;
+      grid-row: 1;
+      svg {
+        width: 23px;
+      }
+    }
+    #about-blurb {
+      grid-column: 1 / -1;
+      font-size: 16px;
+      margin: 0 25px;
+    }
+  }
+  .experience {
+    display: none !important;
+  }
+  .tags {
+    padding-left: 25px;
+    padding-bottom: 20px !important;
+    gap: 15px !important;
+    .tag-unchecked {
+      padding: 8px 23px !important;
+      font-size: 18px !important;
+    }
+    .tag-checked {
+      padding: 8px 23px !important;
+      font-size: 18px !important;
+    }
+  }
+  .sect-hr {
+    align-self: center;
+    justify-self: center;
+    height: 2px;
+    width: 20%;
+    background-color: #e9ebec;
+  }
+  .work-thumb {
+    margin: 0 25px;
+    padding-bottom: 25px;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 20px !important;
+    row-gap: 20px !important;
   }
 }

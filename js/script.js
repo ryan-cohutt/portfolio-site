@@ -2,11 +2,11 @@ const dot = document.querySelector(".active-dot")
 const buttons = document.querySelectorAll(".page-links button")
 const container = document.querySelector(".cont")
 const tagButtons = document.querySelectorAll(".tags button")
-const workPopup = document.getElementById("workPopup");
-const popupClose = document.getElementById("popupClose");
-const popupOverlay = workPopup.querySelector(".popup-overlay");
-const popupProjectsContainer = workPopup.querySelector(".popup-projects-container");
-const workItems = document.querySelectorAll(".work-thumb img");
+const workPopup = document.getElementById("workPopup")
+const popupClose = document.getElementById("popupClose")
+const popupOverlay = workPopup.querySelector(".popup-overlay")
+const popupProjectsContainer = workPopup.querySelector(".popup-projects-container")
+const workItems = document.querySelectorAll(".work-thumb img")
 const popupImage = document.getElementById("popupImage")
 const popupTitle = document.getElementById("popupTitle")
 const popupDescription = document.getElementById("popupDescription")
@@ -23,6 +23,112 @@ const companyPosition = document.getElementById("companyPosition")
 const companyDuration = document.getElementById("companyDuration")
 const companyDesc = document.getElementById("companyDesc")
 
+let isDragging = false
+let startY = 0
+let startPosition = "home" // Can be 'home', 'work', or 'about'
+let currentState = "home" // Track current state for snapping
+
+const sectHr = document.querySelector(".sect-hr")
+
+sectHr.addEventListener("mousedown", startDrag)
+sectHr.addEventListener("touchstart", startDrag)
+
+function startDrag(e) {
+  // Only activate on mobile
+  if (window.innerWidth > 500) return
+
+  isDragging = true
+  startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
+  startPosition = currentState
+
+  sectHr.style.cursor = "grabbing"
+  document.body.style.userSelect = "none"
+}
+
+document.addEventListener("mousemove", dragDivider)
+document.addEventListener("touchmove", dragDivider)
+
+function dragDivider(e) {
+  if (!isDragging) return
+
+  const currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY
+  const deltaY = currentY - startY
+
+  // Calculate new position (0 = top/work, middle = 50/50, bottom = about)
+  const container = document.querySelector(".cont")
+  const containerRect = container.getBoundingClientRect()
+  const dividerY = sectHr.getBoundingClientRect().top - containerRect.top
+
+  // Just update visual feedback during drag (optional)
+  sectHr.style.opacity = "0.7"
+}
+
+document.addEventListener("mouseup", endDrag)
+document.addEventListener("touchend", endDrag)
+
+function endDrag(e) {
+  if (!isDragging) return
+  isDragging = false
+
+  const endY = e.type.includes("touch") ? e.changedTouches[0].clientY : e.clientY
+  const deltaY = endY - startY
+
+  const viewportHeight = window.innerHeight
+  const thresholdPercent = 0.1 // 10% threshold for snapping
+
+  // Determine snap target based on drag distance and direction
+  let snapTarget = startPosition
+  const dragThreshold = viewportHeight * thresholdPercent
+
+  if (startPosition === "home") {
+    // From home, dragging up goes to work, down goes to about
+    if (deltaY < -dragThreshold) {
+      snapTarget = "work"
+    } else if (deltaY > dragThreshold) {
+      snapTarget = "about"
+    }
+  } else if (startPosition === "work") {
+    // From work, dragging down returns to home
+    if (deltaY > dragThreshold) {
+      snapTarget = "home"
+    }
+  } else if (startPosition === "about") {
+    // From about, dragging up returns to home
+    if (deltaY < -dragThreshold) {
+      snapTarget = "home"
+    }
+  }
+
+  // Apply the snap state
+  container.classList.remove("work-view", "about-view")
+
+  if (snapTarget === "work") {
+    container.classList.add("work-view")
+    currentState = "work"
+  } else if (snapTarget === "about") {
+    container.classList.add("about-view")
+    currentState = "about"
+  } else {
+    currentState = "home"
+  }
+
+  // Update nav button active state
+  const buttons = document.querySelectorAll(".page-links button")
+  buttons.forEach((btn) => btn.classList.remove("btn-active"))
+
+  if (snapTarget === "work") {
+    document.querySelector(".work-link").classList.add("btn-active")
+  } else if (snapTarget === "about") {
+    document.querySelector(".about-link").classList.add("btn-active")
+  } else {
+    document.querySelector(".home-link").classList.add("btn-active")
+  }
+
+  sectHr.style.opacity = "1"
+  sectHr.style.cursor = "grab"
+  document.body.style.userSelect = "auto"
+}
+
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     // Position the dot relative to the page-links container
@@ -30,7 +136,7 @@ buttons.forEach((button) => {
     const pageLinksRect = pageLinks.getBoundingClientRect()
     const btnRect = button.getBoundingClientRect()
     // compute top position of dot relative to pageLinks (center of button)
-    const offsetTop = (btnRect.top - pageLinksRect.top) + (btnRect.height / 2) - 4 // 4 = dot radius
+    const offsetTop = btnRect.top - pageLinksRect.top + btnRect.height / 2 - 4 // 4 = dot radius
 
     dot.style.top = `${offsetTop}px`
 
@@ -43,8 +149,10 @@ buttons.forEach((button) => {
 
     if (button.classList.contains("work-link")) {
       container.classList.add("work-view")
+      currentState = "work"
     } else if (button.classList.contains("about-link")) {
       container.classList.add("about-view")
+      currentState = "about"
     } else if (button.classList.contains("contact-link")) {
       // open contact popup (preserve your existing contact popup logic)
       contactPopup.classList.add("active")
@@ -61,7 +169,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const pageLinks = active.closest(".page-links")
     const pageLinksRect = pageLinks.getBoundingClientRect()
     const btnRect = active.getBoundingClientRect()
-    const offsetTop = (btnRect.top - pageLinksRect.top) + (btnRect.height / 2) - 4
+    const offsetTop = btnRect.top - pageLinksRect.top + btnRect.height / 2 - 4
     dot.style.top = `${offsetTop}px`
   }
 })
@@ -129,14 +237,14 @@ tagButtons.forEach((button) => {
 
     // Filter work items: add .inactive to items that don't match, remove it for matches
     workItems.forEach((item) => {
-      const categories = item.getAttribute("data-category").split(" ");
+      const categories = item.getAttribute("data-category").split(" ")
 
       if (activeTags.has("all") || categories.some((cat) => activeTags.has(cat))) {
-        item.classList.remove("inactive");
+        item.classList.remove("inactive")
       } else {
-        item.classList.add("inactive");
+        item.classList.add("inactive")
       }
-    });
+    })
   })
 })
 
@@ -190,18 +298,18 @@ companyBlocks.forEach((block) => {
 
 // Hide all projects initially inside the popup
 function hideAllProjects() {
-  const projects = popupProjectsContainer.querySelectorAll(".popup-project");
+  const projects = popupProjectsContainer.querySelectorAll(".popup-project")
   projects.forEach((proj) => {
-    proj.style.display = "none";
-  });
+    proj.style.display = "none"
+  })
 }
 
 // Show specific project by id inside the popup
 function showProject(projectId) {
-  hideAllProjects();
-  const project = document.getElementById(projectId);
+  hideAllProjects()
+  const project = document.getElementById(projectId)
   if (project) {
-    project.style.display = "grid"; // use flex to show content with flex layout
+    project.style.display = "grid" // use flex to show content with flex layout
   }
 }
 
@@ -209,36 +317,36 @@ function showProject(projectId) {
 function updateURLHash(projectId) {
   if (history.pushState) {
     // Use pushState to avoid scrolling to element with that ID
-    history.pushState(null, null, `#${projectId}`);
+    history.pushState(null, null, `#${projectId}`)
   } else {
     // Fallback for older browsers
-    location.hash = `#${projectId}`;
+    location.hash = `#${projectId}`
   }
 }
 
 // Clear URL hash when popup closes
 function clearURLHash() {
   if (history.pushState) {
-    history.pushState("", document.title, window.location.pathname + window.location.search);
+    history.pushState("", document.title, window.location.pathname + window.location.search)
   } else {
-    location.hash = "";
+    location.hash = ""
   }
 }
 
 // Open popup with specific project content
 function openPopup(projectId) {
-  showProject(projectId);
-  workPopup.classList.add("active");
-  document.body.style.overflow = "hidden";
-  updateURLHash(projectId);
+  showProject(projectId)
+  workPopup.classList.add("active")
+  document.body.style.overflow = "hidden"
+  updateURLHash(projectId)
 }
 
 // Close popup and reset states
 function closePopup() {
-  workPopup.classList.remove("active");
-  document.body.style.overflow = "auto";
-  hideAllProjects();
-  clearURLHash();
+  workPopup.classList.remove("active")
+  document.body.style.overflow = "auto"
+  hideAllProjects()
+  clearURLHash()
 }
 
 // Attach click event on each work item (thumbnail)
@@ -246,26 +354,28 @@ workItems.forEach((item, index) => {
   // Assuming each work item has a data attribute with project id to match popup project div id
   // e.g. data-project-id="project-1"
   item.addEventListener("click", () => {
-    const projectId = item.getAttribute("data-project-id");
+    const projectId = item.getAttribute("data-project-id")
     if (projectId) {
-      openPopup(projectId);
+      openPopup(projectId)
     }
-  });
-});
+  })
+})
 
 // Close popup on clicking close button or overlay
-popupClose.addEventListener("click", closePopup);
-popupOverlay.addEventListener("click", closePopup);
+popupClose.addEventListener("click", closePopup)
+popupOverlay.addEventListener("click", closePopup)
 
 // Close popup on Escape key press
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && workPopup.classList.contains("active")) {
-    closePopup();
+  if (e.key === "Escape") {
+    if (workPopup.classList.contains("active")) {
+      closePopup()
+    }
   }
-});
+})
 
 // Initially hide all projects inside popup so nothing shows before open
-hideAllProjects();
+hideAllProjects()
 
 function closeContactPopup() {
   contactPopup.classList.remove("active")
@@ -276,9 +386,6 @@ function closeCompanyPopup() {
   companyPopup.classList.remove("active")
   document.body.style.overflow = "auto"
 }
-
-popupClose.addEventListener("click", closePopup)
-popupOverlay.addEventListener("click", closePopup)
 
 contactPopupClose.addEventListener("click", closeContactPopup)
 contactPopup.querySelector(".popup-overlay").addEventListener("click", closeContactPopup)
@@ -308,11 +415,11 @@ window.addEventListener("DOMContentLoaded", () => {
 })
 
 window.addEventListener("DOMContentLoaded", () => {
-  const hash = window.location.hash.substring(1); // Remove the #
+  const hash = window.location.hash.substring(1) // Remove the #
   if (hash) {
-    const project = document.getElementById(hash);
+    const project = document.getElementById(hash)
     if (project) {
-      openPopup(hash);
+      openPopup(hash)
     }
   }
-});
+})
