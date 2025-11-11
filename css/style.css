@@ -962,9 +962,17 @@ body {
   .sect-hr {
     align-self: center;
     justify-self: center;
-    height: 2px;
-    width: 20%;
-    background-color: #e9ebec;
+    background-color: transparent;
+    height: 10px;
+    width: 100%;
+    display: grid;
+    .mobile-bar {
+      align-self: center;
+      justify-self: center;
+      height: 2px;
+      width: 20%;
+      background-color: #e9ebec;
+    }
   }
   .work-thumb {
     margin: 0 25px;
