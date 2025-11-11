@@ -417,7 +417,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-/* Added mobile tab navigation listeners */
+/* Updated mobile tab navigation to use new .mobile-nav-bar */
 const mobileTabButtons = document.querySelectorAll(".mobile-tab-btn")
 
 mobileTabButtons.forEach((button) => {

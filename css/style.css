@@ -376,15 +376,31 @@ body {
   align-items: center;
   justify-content: center;
 }
-.mobile-tabs {
+
+/* Added mobile nav bar styling - static bottom navigation */
+.mobile-nav-bar {
   display: none;
-  gap: 10px;
-  width: 100%;
+  justify-self: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
   background-color: #e9ebec;
   border-radius: 50px;
   height: min-content;
-  justify-content: space-evenly;
-  margin: 0 25px 52px;
+  z-index: 1500;
+  gap: 10px;
+  width: calc(100% - 30px);
+  padding: 15px 25px calc(15px + max(0px, env(safe-area-inset-bottom)));
+  justify-content: space-around;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0px 0px 29px 3px rgba(16,17,18,0.6); 
+  box-shadow: 0px 0px 29px 3px rgba(16,17,18,0.6);
+}
+
+.mobile-tabs {
+  display: none;
 }
 
 .mobile-tab-btn {
@@ -399,7 +415,6 @@ body {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 10px 0;
   p {
     margin: 0;
   }
@@ -937,12 +952,12 @@ body {
     display: grid;
     --row1: 1fr;
     --row2: 5px;
-    --row3: 1.3fr;
+    --row3: 1fr;
     grid-template-columns: 1fr;
     column-gap: 0;
     row-gap: 10px;
     row-gap: 15px;
-    padding-bottom: 20px;
+    /* padding-bottom: 20px; */
   }
   .about {
     grid-template-columns: 1fr min-content;
@@ -1002,9 +1017,9 @@ body {
     justify-self: center;
     height: auto;
     width: 100%;
-    background-color: #101112;
+    background-color: transparent;
   }
-  .mobile-tabs {
+  .mobile-nav-bar {
     display: flex;
   }
   .work-thumb {
