@@ -17,6 +17,7 @@ body {
 
 * {
   box-sizing: border-box;
+  letter-spacing: 0px !important;
 }
 
 /* FONTS */
@@ -379,8 +380,11 @@ body {
   display: none;
   gap: 10px;
   width: 100%;
-  justify-content: center;
-  padding-bottom: 25px;
+  background-color: #e9ebec;
+  border-radius: 50px;
+  height: min-content;
+  justify-content: space-evenly;
+  margin: 0 25px 52px;
 }
 
 .mobile-tab-btn {
@@ -395,17 +399,21 @@ body {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  padding: 10px 0;
+  p {
+    margin: 0;
+  }
   svg {
     width: 20px;
   }
 }
 
 .mobile-tab-btn:hover {
-  color: #e9ebec;
+  color: #101112;
 }
 
 .mobile-tab-btn.active {
-  color: #e9ebec;
+  color: #101112;
 }
 
 .work-sect {
