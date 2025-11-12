@@ -356,7 +356,7 @@ body {
   #about-blurb {
     grid-column: 1 / -1;
     grid-row: 3;
-    font-size: 36px;
+    font-size: clamp(1rem, 1.5vw, 2.3rem);
     color: #818992;
     margin: 0;
     line-height: 1.4em;
