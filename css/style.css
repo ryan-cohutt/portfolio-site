@@ -451,7 +451,7 @@ body {
     display: flex;
     gap: 20px;
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
     .tag-unchecked {
       background-color: transparent;
       border: clamp(0.05rem, 0.1vw, 0.13rem) solid #e9ebec;
@@ -471,7 +471,8 @@ body {
       color: #101112;
     }
     .tag-checked {
-      background-color: #1f2123;
+      background-color: #e9ebec;
+      color: #101112;
       border: none;
       display: flex;
       justify-items: center;
@@ -479,7 +480,6 @@ body {
       padding: clamp(0.15rem, 0.4vw, 0.63rem) clamp(0.4rem, 1.2vw, 2.2rem);
       border-radius: 30px;
       font-size: clamp(0.9rem, 1vw, 1.5rem);
-      color: #e9ebec;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -508,7 +508,8 @@ body {
 }
 
 .work-thumb img.inactive {
-  filter: blur(6px) grayscale(20%);
+  /* filter: blur(6px) grayscale(20%); */
+  display: none;
   opacity: 0.35;
   transform: scale(0.98);
   pointer-events: none;
