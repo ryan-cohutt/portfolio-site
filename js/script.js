@@ -122,6 +122,34 @@ const sectHr = document.querySelector(".sect-hr")
 //   document.body.style.userSelect = "auto"
 // }
 
+const images = document.querySelectorAll('.gallery-img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const closeBtn = document.getElementById('closeBtn');
+
+// Open lightbox on image click
+images.forEach(img => {
+  img.addEventListener('click', () => {
+    lightboxImg.src = img.src;
+    lightbox.classList.remove('hidden');
+  });
+});
+
+// Close button
+closeBtn.addEventListener('click', () => {
+  lightbox.classList.add('hidden');
+  lightboxImg.src = "";
+});
+
+// Close by clicking outside the image
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) {
+    lightbox.classList.add('hidden');
+    lightboxImg.src = "";
+  }
+});
+
+
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     // Position the dot relative to the page-links container

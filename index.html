@@ -12,6 +12,10 @@
 </head>
 <body>
     <div class="cont">
+        <div id="lightbox" class="lightbox hidden">
+            <span id="closeBtn" class="close-btn">&times;</span>
+            <img id="lightboxImg" src="" alt="">
+        </div>
         <div class="sidebar">
             <div class="pages">
                 <h4 class="bricolage-med side-heading">Pages</h4>
@@ -231,7 +235,7 @@
                 <img src="images/fresh-thumb.png" alt="Fresh Fields" data-project-id="project-4" data-category="branding graphics concepts" data-title="Fresh Fields Email Campaign" data-description="">
                 <img src="images/island-thumb.png" alt="Island Cove Marina" data-project-id="project-5" data-category="concept client-work branding graphics" data-title="Island Cove Marina Concept Logo" data-description="">
                 <img src="images/skull-thumb.png" alt="Skull Flower" data-project-id="project-6" data-category="concept branding graphics" data-title="Skull Flower Concept Logo" data-description="">
-                <img src="https://placehold.co/360" alt="Project 7" data-category="graphics ui-ux" data-title="Dashboard Interface" data-description="Clean and intuitive dashboard design for a data analytics platform.">
+                <img src="images/valoris-thumb.png" alt="Valoris Game" data-project-id="project-7" data-category="development" data-title="Valoris Game Development" data-description="">
                 <img src="https://placehold.co/360" alt="Project 8" data-category="client-work concepts" data-title="Event Branding" data-description="Complete visual identity for a tech conference including badges, signage, and digital assets.">
                 <img src="https://placehold.co/360" alt="Project 9" data-category="branding client-work" data-title="Corporate Identity" data-description="Professional corporate identity design for a consulting firm.">
                 <img src="https://placehold.co/360" alt="Project 10" data-category="ui-ux graphics" data-title="Icon Set Design" data-description="Custom icon set design for a productivity application with consistent style.">
@@ -257,7 +261,7 @@
                 <h1 class="project-title fraunces-bold-it">Canopy App</h1>
                 <p class="project-subtitle bricolage-reg"></p>
 
-                <img src="images/canopy-thumb.png" alt="Canopy App Project Main Visual" class="main-image"/>
+                <img src="images/canopy-thumb.png" alt="Canopy App Project Main Visual" class="main-image gallery-img"/>
 
                 <div class="description-section">
                     <div class="description-text">
@@ -289,7 +293,7 @@
                 <h1 class="project-title fraunces-bold-it">Moss & Pebble App</h1>
                 <p class="project-subtitle bricolage-reg"></p>
 
-                <img src="images/moss-thumb.png" alt="Moss & Pebble App Project Main Visual" class="main-image"/>
+                <img src="images/moss-thumb.png" alt="Moss & Pebble App Project Main Visual" class="main-image gallery-img"/>
 
                 <div class="description-section">
                     <div class="description-text">
@@ -321,7 +325,7 @@
                 <h1 class="project-title fraunces-bold-it">Slice Haven App</h1>
                 <p class="project-subtitle bricolage-reg"></p>
 
-                <img src="images/pizza-thumb.png" alt="Slice Haven App Project Main Visual" class="main-image"/>
+                <img src="images/pizza-thumb.png" alt="Slice Haven App Project Main Visual" class="main-image gallery-img"/>
 
                 <div class="description-section">
                     <div class="description-text">
@@ -353,7 +357,7 @@
                 <h1 class="project-title fraunces-bold-it">Fresh Fields Email Campaign</h1>
                 <p class="project-subtitle bricolage-reg"></p>
 
-                <img src="images/fresh-thumb.png" alt="Fresh Fields Email Campaign Project Main Visual" class="main-image"/>
+                <img src="images/fresh-thumb.png" alt="Fresh Fields Email Campaign Project Main Visual" class="main-image gallery-img"/>
 
                 <div class="description-section">
                     <div class="description-text">
@@ -376,6 +380,51 @@
                             <div class="tag bricolage-reg">Branding</div>
                             <div class="tag bricolage-reg">UI/UX</div>
                             <div class="tag bricolage-reg">Concepts</div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <div class="popup-project" id="project-7">
+                <h1 class="project-title fraunces-bold-it">Valoris Game</h1>
+                <p class="project-subtitle bricolage-reg"></p>
+
+                <img src="images/valoris-thumb.png" alt="Valoris Game Development Project Main Visual" class="main-image gallery-img"/>
+
+                <div class="description-section">
+                    <div class="description-text">
+                        <p class="bricolage-reg">
+                        I have always loved game design as a practice, both the visual aspects and the coding/logical aspects. With the rise of publicly accessible LLMs, I had an idea for a development project that I wanted to begin working on just to stretch my skills and explore the possibilities of AI in game-like experiences. This project, while still very much under development, is a modern take on classic text adventure games. As someone who loves the experience of Dungeons and Dragons, I wanted to try and combine that classic text-adventure style with modern AI models to create a freedom-heavy DnD-style game experience where the player is given total control over their actions, words, and future. They are given absolute and total freedom to be whoever they want in this world, and the NPCs and world will adapt and react to however the player chooses to portray themselves.
+                        </p>
+                        <p class="bricolage-reg">
+                        On the technical side of things, I am using a combination of HTML, CSS, JavaScript, JSON, and Ollama to achieve this prototype. Firstly, I designed a completely custom HTML Canvas for the classic pixel art style to be pixel-perfect, with the UI also being fully functional. Then, in the actual game logic, the information systems work with a combination of JavaScript logic pulling information and saving it to either JSON files or Markdown files. There are many of both file types that contain various information, from world lore to game rules to map nodes and more. Now for the actual LLM usage, there are a few. The goal is to have multiple different LLMs with different functions act together as a Dungeon Master of sorts. For example, the NPC bot is fed that NPC's character sheet, the player's character sheet, the world lore and rules, and some basic contextual instructions. This is only temporary while the basic game loop is being developed, as I am planning on implimenting both a RAG system and other contextual tools for the LLMs to have smaller, consistent knowledge chunks. The NPCs also have extensive memories, with current conversations being saved to a JSON, and older interactions being summerized and appended as memory chunks. 
+                        </p>
+                        <div id="valoris-image-grid">
+                            <img src="images/valoris/StartScreen.png" class="gallery-img" alt="" style="grid-column: 1; grid-row: 1;">
+                            <img src="images/valoris/CharacterBasics.png" class="gallery-img" alt="" style="grid-column: 2; grid-row: 1;">
+                            <img src="images/valoris/CharacterTraits.png" class="gallery-img" alt="" style="grid-column: 1; grid-row: 2;">
+                            <img src="images/valoris/CharacterStats.png" class="gallery-img" alt="" style="grid-column: 2; grid-row: 2;">
+                            <img src="images/valoris/ClassFigures.png" class="gallery-img" alt="" style="grid-column: 1 / -1; grid-row: 3;">
+                        </div>
+                        <p class="bricolage-reg">
+                        Here are a few of the assets/screens I designed from scratch for the interface and experience. Some of them (like the title & stats screen) are still being designed fully, but this is the general look and feel I am striving for.
+                        </p>
+                        <video src="./videos/valoris-dev-ex.mkv" width="100%" height="" type='video/mkv' controls></video>
+                        </p>
+                        <p class="bricolage-reg">
+                        Here is a dev test of my current version - it does not have any of the visuals currently while I still work on the logic and functionality. In it you can see how the character creator leads into the world introduction and NPC interaction functions. In this beginning loop, the player approaches the gate of a city, and has to talk to and convince the gate guard to let them into the city, which then triggers the location change as they enter and an introduction to the city.
+                        </p>
+                    </div>
+                    <aside class="project-details">
+                        <h3 class="bricolage-semi">Project Details</h3>
+                        <!-- <p><strong>Client:</strong> Canopy Technologies</p> -->
+                        <p class="bricolage-reg"><strong>Date:</strong> August 2025 - Current</p>
+                        <!-- <p><strong>Role:</strong> Lead Designer</p> -->
+                        <p class="bricolage-reg"><strong>Tools Used:</strong> HTML, CSS, JavaScript, Ollama, Aseprite</p>
+
+                        <h3 class="bricolage-semi">Categories</h3>
+                        <div class="tags">
+                            <div class="tag bricolage-reg">Development</div>
                         </div>
                     </aside>
                 </div>

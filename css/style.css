@@ -919,6 +919,56 @@ body {
   line-height: 1.6;
 }
 
+#valoris-image-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: min-content min-content min-content;
+  row-gap: 10px;
+  column-gap: 10px;
+  align-items: center;
+  justify-items: center;
+}
+
+.gallery-img {
+  cursor: pointer;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(10px, 3vw, 30px);
+  z-index: 2000;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Lightbox image grows to fill screen but stays contained */
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: clamp(6px, 1vw, 14px);
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: clamp(10px, 2vw, 20px);
+  right: clamp(10px, 2vw, 20px);
+  font-size: clamp(24px, 4vw, 48px);
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
 @media (max-width: 768px) {
   .popup-content {
     grid-template-columns: 1fr;
