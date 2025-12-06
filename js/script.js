@@ -127,10 +127,11 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const closeBtn = document.getElementById('closeBtn');
 
-// Open lightbox on image click
+// Open lightbox
 images.forEach(img => {
   img.addEventListener('click', () => {
     lightboxImg.src = img.src;
+    lightboxBlur.style.background = `transparent`;
     lightbox.classList.remove('hidden');
   });
 });
@@ -139,16 +140,17 @@ images.forEach(img => {
 closeBtn.addEventListener('click', () => {
   lightbox.classList.add('hidden');
   lightboxImg.src = "";
+  lightboxBlur.style.background = "transparent";
 });
 
 // Close by clicking outside the image
-lightbox.addEventListener('click', (e) => {
-  if (e.target === lightbox) {
+lightboxBlur.addEventListener('click', (e) => {
+  if (e.target === lightboxBlur) {
     lightbox.classList.add('hidden');
     lightboxImg.src = "";
+    lightboxBlur.style.background = "transparent";
   }
 });
-
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
