@@ -22,6 +22,72 @@ const companyName = document.getElementById("companyName")
 const companyPosition = document.getElementById("companyPosition")
 const companyDuration = document.getElementById("companyDuration")
 const companyDesc = document.getElementById("companyDesc")
+const aboutBlurb = document.querySelector("#about-blurb")
+const experiencePopup = document.querySelector(".experience-popup")
+const experienceBtn = document.querySelector("#see-experience")
+const experienceClose = document.querySelector("#experience-close")
+
+if (aboutBlurb) {
+  // Store original display so fadeIn can restore correctly
+  aboutBlurb.dataset.originalDisplay = getComputedStyle(aboutBlurb).display || "block"
+}
+
+// Simple JS-only fade helpers (no CSS edits required)
+function fadeOut(el, duration = 200) {
+  if (!el) return
+  if (el._fadeTimeout) clearTimeout(el._fadeTimeout)
+  el.style.transition = `opacity ${duration}ms ease`
+  // ensure we start from fully opaque
+  el.style.opacity = "1"
+  requestAnimationFrame(() => {
+    el.style.opacity = "0"
+  })
+  el._fadeTimeout = setTimeout(() => {
+    el.style.display = "none"
+    el.style.transition = ""
+    el._fadeTimeout = null
+  }, duration)
+}
+
+function fadeIn(el, duration = 200) {
+  if (!el) return
+  if (el._fadeTimeout) {
+    clearTimeout(el._fadeTimeout)
+    el._fadeTimeout = null
+  }
+  const desiredDisplay = el.dataset.originalDisplay || "block"
+  el.style.display = desiredDisplay
+  // start invisible
+  el.style.opacity = "0"
+  el.style.transition = `opacity ${duration}ms ease`
+  requestAnimationFrame(() => {
+    el.style.opacity = "1"
+  })
+  el._fadeTimeout = setTimeout(() => {
+    el.style.transition = ""
+    el._fadeTimeout = null
+  }, duration)
+}
+
+function updateAboutBlurbVisibility(animate = true) {
+  if (!aboutBlurb) return
+  // Hide the blurb when in 'home' or 'work' views, otherwise let CSS show it
+  if (currentState === "home" || currentState === "work") {
+    if (animate) {
+      fadeOut(aboutBlurb, 200)
+    } else {
+      aboutBlurb.style.display = "none"
+      aboutBlurb.style.opacity = ""
+    }
+  } else {
+    if (animate) {
+      fadeIn(aboutBlurb, 200)
+    } else {
+      aboutBlurb.style.display = aboutBlurb.dataset.originalDisplay || ""
+      aboutBlurb.style.opacity = ""
+    }
+  }
+} 
 
 const isDragging = false
 const startY = 0
@@ -126,6 +192,7 @@ const images = document.querySelectorAll('.gallery-img');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const closeBtn = document.getElementById('closeBtn');
+const lightboxBlur = document.getElementById('lightboxBlur');
 
 // Open lightbox
 images.forEach(img => {
@@ -137,20 +204,32 @@ images.forEach(img => {
 });
 
 // Close button
-closeBtn.addEventListener('click', () => {
-  lightbox.classList.add('hidden');
-  lightboxImg.src = "";
-  lightboxBlur.style.background = "transparent";
-});
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    if (lightbox) lightbox.classList.add('hidden');
+    if (lightboxImg) lightboxImg.src = "";
+    if (lightboxBlur) lightboxBlur.style.background = "transparent";
+    // Also close experience popup if it's open
+    if (experiencePopup && experiencePopup.classList.contains('active')) {
+      closeExperiencePopup()
+    }
+  });
+}
 
 // Close by clicking outside the image
-lightboxBlur.addEventListener('click', (e) => {
-  if (e.target === lightboxBlur) {
-    lightbox.classList.add('hidden');
-    lightboxImg.src = "";
-    lightboxBlur.style.background = "transparent";
-  }
-});
+if (lightboxBlur) {
+  lightboxBlur.addEventListener('click', (e) => {
+    if (e.target === lightboxBlur) {
+      if (lightbox) lightbox.classList.add('hidden');
+      if (lightboxImg) lightboxImg.src = "";
+      lightboxBlur.style.background = "transparent";
+      // Also close experience popup if active
+      if (experiencePopup && experiencePopup.classList.contains('active')) {
+        closeExperiencePopup()
+      }
+    }
+  });
+}
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -180,8 +259,11 @@ buttons.forEach((button) => {
       // open contact popup (preserve your existing contact popup logic)
       contactPopup.classList.add("active")
       document.body.style.overflow = "hidden"
+    } else {
+      // Home button: explicitly set state so helpers run predictably
+      currentState = "home"
     }
-    // Home button just leaves container with no view classes (50/50)
+    updateAboutBlurbVisibility()
   })
 })
 
@@ -194,7 +276,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const btnRect = active.getBoundingClientRect()
     const offsetTop = btnRect.top - pageLinksRect.top + btnRect.height / 2 - 4
     dot.style.top = `${offsetTop}px`
+
+    // Derive initial state from the active button so visibility is correct on load
+    if (active.classList.contains("work-link")) {
+      currentState = "work"
+    } else if (active.classList.contains("about-link")) {
+      currentState = "about"
+    } else {
+      currentState = "home"
+    }
+  } else {
+    currentState = "home"
   }
+
+  updateAboutBlurbVisibility(false)
 })
 
 const activeTags = new Set(["all"])
@@ -315,6 +410,8 @@ companyBlocks.forEach((block) => {
 
     // Show popup
     companyPopup.classList.add("active")
+    experiencePopup.style.display = "none"
+    if (lightbox) lightbox.classList.add('hidden')
     document.body.style.overflow = "hidden"
   })
 })
@@ -394,6 +491,9 @@ document.addEventListener("keydown", (e) => {
     if (workPopup.classList.contains("active")) {
       closePopup()
     }
+    if (experiencePopup && experiencePopup.classList.contains("active")) {
+      closeExperiencePopup()
+    }
   }
 })
 
@@ -416,6 +516,39 @@ contactPopup.querySelector(".popup-overlay").addEventListener("click", closeCont
 companyPopupClose.addEventListener("click", closeCompanyPopup)
 companyPopup.querySelector(".popup-overlay").addEventListener("click", closeCompanyPopup)
 
+// Experience popup open/close handlers
+function openExperiencePopup() {
+  if (!experiencePopup) return
+  experiencePopup.style.display = "grid"
+  experiencePopup.classList.add("active")
+  document.body.style.overflow = "hidden"
+  // Also show lightbox overlay for a dim background if available
+  if (lightbox) lightbox.classList.remove('hidden')
+  if (lightboxBlur) lightboxBlur.style.background = 'rgba(0,0,0,0.6)'
+}
+
+function closeExperiencePopup() {
+  if (!experiencePopup) return
+  experiencePopup.classList.remove("active")
+  experiencePopup.style.display = "none"
+  document.body.style.overflow = "auto"
+  // Hide lightbox when experience closes
+  if (lightbox) lightbox.classList.add('hidden')
+  if (lightboxImg) lightboxImg.src = ""
+  if (lightboxBlur) lightboxBlur.style.background = "transparent"
+}
+
+if (experienceBtn) {
+  experienceBtn.addEventListener("click", openExperiencePopup)
+}
+if (experienceClose) {
+  experienceClose.addEventListener("click", closeExperiencePopup)
+}
+if (experiencePopup) {
+  const expOverlay = experiencePopup.querySelector(".popup-overlay")
+  if (expOverlay) expOverlay.addEventListener("click", closeExperiencePopup)
+}
+
 // Close popup with Escape key
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
@@ -427,6 +560,9 @@ document.addEventListener("keydown", (e) => {
     }
     if (companyPopup.classList.contains("active")) {
       closeCompanyPopup()
+    }
+    if (experiencePopup && experiencePopup.classList.contains("active")) {
+      closeExperiencePopup()
     }
   }
 })
@@ -471,6 +607,8 @@ mobileTabButtons.forEach((button) => {
       currentState = "home"
     }
 
+    updateAboutBlurbVisibility()
+
     // Update desktop navigation if visible
     buttons.forEach((btn) => btn.classList.remove("btn-active"))
     if (viewType === "work") {
@@ -489,4 +627,5 @@ window.addEventListener("DOMContentLoaded", () => {
   if (homeTabBtn) {
     homeTabBtn.classList.add("active")
   }
+  updateAboutBlurbVisibility(false)
 })
