@@ -923,8 +923,8 @@ body {
 }
 
 .company-description p {
-  font-size: 18px;
-  color: #818992;
+  font-size: 20px;
+  color: white;
   margin: 0;
   line-height: 1.6;
 }
@@ -945,6 +945,17 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: min-content;
+  row-gap: 10px;
+  column-gap: 10px;
+  align-items: center;
+  justify-items: center;
+}
+
+#usavrcn-image-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
   row-gap: 10px;
   column-gap: 10px;
   align-items: center;
